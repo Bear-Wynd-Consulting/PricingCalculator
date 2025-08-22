@@ -1,0 +1,643 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pricing Strategy Designer & COGS Workbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        .step-indicator.active {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+        .step-indicator.completed {
+            background-color: #16a34a;
+            color: white;
+            border-color: #16a34a;
+        }
+        .card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card.selected {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.4);
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+            transition: background-color 0.2s;
+        }
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+        }
+        .tab.active {
+            border-color: #4f46e5;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #summary-section, #summary-section * {
+                visibility: visible;
+            }
+            #summary-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-5xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">AI Pricing Strategy Designer</h1>
+            <p class="mt-2 text-lg text-gray-600">Craft a robust monetization strategy and financial plan for your AI product.</p>
+        </header>
+
+        <!-- Step Indicators -->
+        <div id="step-indicators" class="flex items-center justify-center space-x-2 sm:space-x-4 mb-10 overflow-x-auto pb-2 no-print">
+            <div id="step-ind-1" class="step-indicator active flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 bg-white font-bold text-gray-500">1</div>
+            <div class="flex-1 h-0.5 bg-gray-300"></div>
+            <div id="step-ind-2" class="step-indicator flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 bg-white font-bold text-gray-500">2</div>
+            <div class="flex-1 h-0.5 bg-gray-300"></div>
+            <div id="step-ind-3" class="step-indicator flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 bg-white font-bold text-gray-500">3</div>
+            <div class="flex-1 h-0.5 bg-gray-300"></div>
+            <div id="step-ind-4" class="step-indicator flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 bg-white font-bold text-gray-500">4</div>
+            <div class="flex-1 h-0.5 bg-gray-300"></div>
+            <div id="step-ind-5" class="step-indicator flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 bg-white font-bold text-gray-500">5</div>
+            <div class="flex-1 h-0.5 bg-gray-300"></div>
+            <div id="step-ind-6" class="step-indicator flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-300 bg-white font-bold text-gray-500">6</div>
+        </div>
+
+        <main id="app-content">
+            <!-- Step 1: Core Value Unit -->
+            <section id="step-1" class="step-content bg-white p-6 sm:p-8 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-1">Step 1: Define Your Core Value Unit</h2>
+                <p class="text-gray-600 mb-6">What is the single most important, quantifiable outcome your product delivers to the customer? This is your North Star.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label for="value-unit" class="block text-sm font-medium text-gray-700">Core Value Unit</label>
+                        <input type="text" id="value-unit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., A resolved support ticket, a qualified sales lead, a detected security threat">
+                    </div>
+                </div>
+                <div class="mt-8 text-right">
+                    <button onclick="nextStep()" class="btn-primary font-semibold py-2 px-6 rounded-lg">Next</button>
+                </div>
+            </section>
+
+            <!-- Step 2: Target Audience & GTM -->
+            <section id="step-2" class="step-content hidden bg-white p-6 sm:p-8 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-1">Step 2: Select Go-to-Market Strategy</h2>
+                <p class="text-gray-600 mb-6">Who are you selling to first? Your initial audience dictates your pricing approach.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="gtm-options">
+                    <div class="card border-2 border-gray-200 p-4 rounded-lg cursor-pointer" onclick="selectCard(this, 'gtm')">
+                        <h3 class="font-bold text-lg">Direct to Customer</h3>
+                        <p class="text-sm text-gray-600 mt-1">Traditional sales-led motion targeting business users and enterprises.</p>
+                        <input type="radio" name="gtm" value="Direct" class="hidden">
+                    </div>
+                    <div class="card border-2 border-gray-200 p-4 rounded-lg cursor-pointer" onclick="selectCard(this, 'gtm')">
+                        <h3 class="font-bold text-lg">Developer-First (PLG)</h3>
+                        <p class="text-sm text-gray-600 mt-1">Product-led growth focused on individual developers and technical teams.</p>
+                        <input type="radio" name="gtm" value="Developer" class="hidden">
+                    </div>
+                    <div class="card border-2 border-gray-200 p-4 rounded-lg cursor-pointer" onclick="selectCard(this, 'gtm')">
+                        <h3 class="font-bold text-lg">Channel/Partner-First</h3>
+                        <p class="text-sm text-gray-600 mt-1">Scaling through resellers, VARs, and ISVs to reach a broader market.</p>
+                        <input type="radio" name="gtm" value="Channel" class="hidden">
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="btn-secondary font-semibold py-2 px-6 rounded-lg">Back</button>
+                    <button onclick="nextStep()" class="btn-primary font-semibold py-2 px-6 rounded-lg">Next</button>
+                </div>
+            </section>
+
+            <!-- Step 3: Pricing Model -->
+            <section id="step-3" class="step-content hidden bg-white p-6 sm:p-8 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-1">Step 3: Choose Your Pricing Model</h2>
+                <p class="text-gray-600 mb-6">Based on your GTM, select the model that best aligns with your product and customer.</p>
+                <div id="pricing-model-options" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="btn-secondary font-semibold py-2 px-6 rounded-lg">Back</button>
+                    <button onclick="nextStep()" class="btn-primary font-semibold py-2 px-6 rounded-lg">Next</button>
+                </div>
+            </section>
+            
+            <!-- Step 4: COGS & OpEx Workbook -->
+            <section id="step-4" class="step-content hidden bg-white p-6 sm:p-8 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-1">Step 4: COGS & OpEx Workbook</h2>
+                <p class="text-gray-600 mb-6">Document your estimated monthly costs to understand your unit economics. All fields are optional.</p>
+                <div class="border-b border-gray-200 mb-6">
+                    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                        <button id="cogs-tab" onclick="switchTab('cogs')" class="tab active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Cost of Goods Sold (COGS)</button>
+                        <button id="opex-tab" onclick="switchTab('opex')" class="tab whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">Operating Expenses (OpEx)</button>
+                    </nav>
+                </div>
+                <div id="cogs-content" class="space-y-4"></div>
+                <div id="opex-content" class="hidden space-y-4"></div>
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="btn-secondary font-semibold py-2 px-6 rounded-lg">Back</button>
+                    <button onclick="nextStep()" class="btn-primary font-semibold py-2 px-6 rounded-lg">Next</button>
+                </div>
+            </section>
+
+            <!-- Step 5: Recommendations -->
+            <section id="step-5" class="step-content hidden bg-white p-6 sm:p-8 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-1">Step 5: Set Financial Goals & See Recommendations</h2>
+                <p class="text-gray-600 mb-6">Use your costs and goals to derive a data-driven price point and forecast your growth.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <!-- Inputs -->
+                    <div class="space-y-4 p-4 border rounded-lg">
+                        <h3 class="font-bold text-lg">Your Financial Inputs</h3>
+                        <div>
+                            <label for="current-customers" class="block text-sm font-medium text-gray-700">Current paying customers</label>
+                            <input type="number" id="current-customers" oninput="calculateRecommendations()" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 25">
+                        </div>
+                        <div>
+                            <label for="growth-rate" class="block text-sm font-medium text-gray-700">Customer growth rate per month (%)</label>
+                            <input type="number" id="growth-rate" oninput="calculateRecommendations()" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 15">
+                        </div>
+                         <div>
+                            <label for="desired-customers" class="block text-sm font-medium text-gray-700">Desired paying customers per month</label>
+                            <input type="number" id="desired-customers" oninput="calculateRecommendations()" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 100">
+                        </div>
+                        <div>
+                            <label for="desired-margin" class="block text-sm font-medium text-gray-700">Desired profit margin per unit (%)</label>
+                            <input type="number" id="desired-margin" oninput="calculateRecommendations()" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="e.g., 60">
+                        </div>
+                    </div>
+                    <!-- Outputs -->
+                    <div class="space-y-4 p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-bold text-lg">Projections & Recommendations</h3>
+                        <div class="bg-white p-3 rounded-md shadow-sm">
+                            <h4 class="text-sm font-semibold text-gray-500">Recommended Price Per Unit</h4>
+                            <p class="text-2xl font-bold text-indigo-600" id="recommended-price-display">$0.00</p>
+                            <p class="text-xs text-gray-500">Covers total costs and achieves your desired margin.</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-md shadow-sm">
+                            <h4 class="text-sm font-semibold text-gray-500">Timeline to Reach Goal</h4>
+                            <p class="text-2xl font-bold text-indigo-600" id="timeline-display">- Months</p>
+                            <p class="text-xs text-gray-500">Months to reach desired customer count at current growth rate.</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-md shadow-sm">
+                            <h4 class="text-sm font-semibold text-gray-500">Projected Monthly Revenue</h4>
+                            <p class="text-base text-gray-800"><span class="font-bold" id="current-revenue-display">$0</span> (Current)</p>
+                            <p class="text-base text-gray-800"><span class="font-bold" id="desired-revenue-display">$0</span> (At Goal)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 border-t pt-6">
+                    <h3 class="text-lg font-bold text-gray-800">Strategic Pricing Tips for a <span id="gtm-strategy-name" class="text-indigo-600"></span> Strategy</h3>
+                    <div id="pricing-tips-display" class="mt-4 space-y-3"></div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="prevStep()" class="btn-secondary font-semibold py-2 px-6 rounded-lg">Back</button>
+                    <button onclick="nextStep()" class="btn-primary font-semibold py-2 px-6 rounded-lg">View Summary</button>
+                </div>
+            </section>
+
+            <!-- Step 6: Summary -->
+            <section id="step-6" class="step-content hidden">
+                <div id="summary-section" class="bg-white p-6 sm:p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-center">Your AI Pricing Strategy Summary</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 text-center">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Core Value Unit</h3>
+                            <p id="summary-value-unit" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">GTM Strategy</h3>
+                            <p id="summary-gtm" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase">Pricing Model</h3>
+                            <p id="summary-model" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-6 mb-6">
+                        <h3 class="text-xl font-bold mb-4 text-center">Financial Projections</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-500">Recommended Price</h4>
+                                <p id="summary-rec-price" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-500">Timeline to Goal</h4>
+                                <p id="summary-timeline" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-500">Current Revenue</h4>
+                                <p id="summary-current-revenue" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                            </div>
+                            <div class="bg-gray-100 p-3 rounded-lg">
+                                <h4 class="text-sm font-semibold text-gray-500">Goal Revenue</h4>
+                                <p id="summary-desired-revenue" class="text-lg font-bold text-indigo-600 mt-1">-</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 border-t pt-6">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4">Cost of Goods Sold (COGS)</h3>
+                            <div id="summary-cogs-table" class="space-y-2"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-4">Operating Expenses (OpEx)</h3>
+                            <div id="summary-opex-table" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-between no-print">
+                    <button onclick="prevStep()" class="btn-secondary font-semibold py-2 px-6 rounded-lg">Back</button>
+                    <div>
+                        <button onclick="downloadCSV()" class="btn-secondary font-semibold py-2 px-6 rounded-lg mr-2">Download Summary (CSV)</button>
+                        <button onclick="startOver()" class="btn-primary font-semibold py-2 px-6 rounded-lg">Start Over</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- DATA ---
+        const state = {
+            currentStep: 1,
+            valueUnit: '',
+            gtm: '',
+            pricingModel: '',
+            costs: {},
+            financialGoals: { customers: 0, margin: 0, currentCustomers: 0, growthRate: 0 }
+        };
+
+        const pricingModelsData = {
+            'Direct': [
+                { id: 'sub-usage', title: 'Hybrid: Subscription + Usage', desc: 'Base subscription fee with a usage-based component. Balances predictability with scalability.' },
+                { id: 'outcome-perf', title: 'Outcome: Performance-Based', desc: 'Payment is contingent upon successful completion of a specific task (e.g., per resolution).' },
+                { id: 'agent', title: 'Agent-Based', desc: 'Price AI agents as "digital employees" to directly replace or augment human labor costs.' },
+                { id: 'credits', title: 'Hybrid: Credit System', desc: 'Subscription tiers include a monthly allowance of credits for specific AI actions.' }
+            ],
+            'Developer': [
+                { id: 'consumption-resource', title: 'Consumption: Resource-Based', desc: 'Granular billing for raw computational resources consumed (e.g., tokens, compute time).' },
+                { id: 'sub-usage-dev', title: 'Hybrid: Subscription + Usage', desc: 'A free/low-cost base tier with pay-as-you-go for usage. Ideal for PLG.' },
+                { id: 'byok', title: 'Hybrid: Bring Your Own API Key (BYOK)', desc: 'Platform subscription where the customer bears the direct cost of underlying model usage.' },
+                { id: 'credits-dev', title: 'Hybrid: Credit System', desc: 'Free tier provides a starting credit balance, with options to purchase more as needed.' }
+            ],
+            'Channel': [
+                { id: 'discount-blocks', title: 'Discounted Credit Blocks', desc: 'Resellers purchase large blocks of usage credits at a discount to sell to customers.' },
+                { id: 'rev-share', title: 'Tiered Revenue Share', desc: 'Partners resell the standard offering and receive a percentage of the revenue generated.' },
+                { id: 'white-label', title: 'White-Labeling', desc: 'Provide an unbranded product for partners to brand and sell as their own solution.' },
+                { id: 'sub-plus-services', title: 'Subscription + Services', desc: 'A simple subscription model that enables partners to add their own high-margin services.' }
+            ]
+        };
+        
+        const pricingTipsData = {
+            'Direct': [
+                { title: 'Focus on Value-Alignment', desc: 'Price based on tangible outcomes (e.g., "per resolution") rather than features. This shifts the conversation to ROI and builds customer trust.' },
+                { title: 'Use Hybrid Models for Balance', desc: 'Combine a base subscription fee for predictability with a usage-based component. This provides budget stability for customers while letting you capture value from high usage.' },
+                { title: 'Implement Tiered Packaging', desc: 'Create distinct tiers (e.g., Starter, Pro, Enterprise) to segment the market, provide clear upgrade paths, and align features with customer needs at different scales.' }
+            ],
+            'Developer': [
+                { title: 'Offer a Generous Free Tier', desc: 'Provide a free tier with a recurring or one-time grant of credits (e.g., $100 in API calls) to allow for meaningful, frictionless experimentation.' },
+                { title: 'Ensure Pricing is Transparent & Usage-Based', desc: 'Developers expect clear, predictable, pay-as-you-go pricing. Provide detailed documentation and calculators to help them estimate costs accurately.' },
+                { title: 'Create a Clear Self-Serve to Enterprise Path', desc: 'Design your pricing to scale smoothly from an individual developer to a large team, adding enterprise features like security, SSO, and admin controls at higher tiers.' }
+            ],
+            'Channel': [
+                { title: 'Build In Margin for Partners', desc: 'Your list price must be high enough to accommodate a partner discount or commission (e.g., 20-40%) while still achieving your own margin targets.' },
+                { title: 'Prioritize Simplicity and Predictability', desc: 'Partners sell what they understand. Simple models like "Discounted Credit Blocks" or tiered subscriptions are easier for them to sell than complex, variable consumption plans.' },
+                { title: 'Enable Value-Added Services', desc: 'Structure your pricing so partners can profitably add their own services (e.g., implementation, consulting) on top. Their success should not depend solely on resale margin.' }
+            ]
+        };
+
+        const cogsItems = [
+            { id: 'cloud', name: 'Cloud Hosting & Compute', desc: 'e.g., AWS, Azure, GCP for servers, storage, bandwidth.' },
+            { id: 'api', name: 'Third-Party API & Data Fees', desc: 'e.g., OpenAI, Anthropic API calls, licensed data streams.' },
+            { id: 'devops-tools', name: 'Monitoring & DevOps Tools', desc: 'e.g., Datadog, New Relic for the production environment.' },
+            { id: 'support', name: 'Customer Support Personnel', desc: 'Salaries for technical support staff handling break/fix issues.' },
+            { id: 'success', name: 'Customer Success (Non-Sales)', desc: 'Salaries for onboarding, training, and implementation CSMs.' },
+            { id: 'services', name: 'Professional Services & Onboarding', desc: 'Salaries for dedicated implementation/migration teams.' },
+            { id: 'sre', name: 'DevOps / SRE Personnel', desc: 'Portion of engineering salaries for maintaining production.' },
+            { id: 'payment', name: 'Payment Processing Fees', desc: 'e.g., Stripe, Adyen fees on customer payments.' }
+        ];
+
+        const opexItems = [
+            { id: 'rd', name: 'R&D Personnel', desc: 'Engineers, PMs, designers building new products/features.' },
+            { id: 'model-train', name: 'Model Training (Initial)', desc: 'Large, one-time costs for training new foundational models.' },
+            { id: 'data-acq', name: 'Data Acquisition (for R&D)', desc: 'Costs to purchase or create datasets for future models.' },
+            { id: 'sales', name: 'Sales Personnel', desc: 'Salaries and commissions for sales teams.' },
+            { id: 'marketing', name: 'Marketing & Advertising', desc: 'Ad spend, content creation, event sponsorships.' },
+            { id: 'ga', name: 'G&A Personnel', desc: 'Finance, HR, legal, and executive salaries.' },
+            { id: 'devrel', name: 'Developer Relations (S&M)', desc: 'Conference sponsorships, content, community management.' },
+            { id: 'channel', name: 'Channel Management (S&M)', desc: 'Partner commissions, MDF, channel manager salaries.' }
+        ];
+
+        // --- UI LOGIC ---
+        function updateStepIndicator() {
+            for (let i = 1; i <= 6; i++) {
+                const indicator = document.getElementById(`step-ind-${i}`);
+                indicator.classList.remove('active', 'completed');
+                if (i < state.currentStep) indicator.classList.add('completed');
+                else if (i === state.currentStep) indicator.classList.add('active');
+            }
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`step-${stepNumber}`).classList.remove('hidden');
+            state.currentStep = stepNumber;
+            updateStepIndicator();
+            window.scrollTo(0, 0);
+        }
+
+        function nextStep() {
+            if (validateStep(state.currentStep)) {
+                saveStepState(state.currentStep);
+                if (state.currentStep < 6) {
+                    if (state.currentStep === 2) populatePricingModels();
+                    if (state.currentStep === 3) populateCostWorkbooks();
+                    if (state.currentStep === 4) populateRecommendations();
+                    if (state.currentStep === 5) generateSummary();
+                    showStep(state.currentStep + 1);
+                }
+            }
+        }
+
+        function prevStep() {
+            if (state.currentStep > 1) showStep(state.currentStep - 1);
+        }
+
+        function validateStep(step) {
+            if (step === 1 && !document.getElementById('value-unit').value) { alert('Please define your core value unit.'); return false; }
+            if (step === 2 && !document.querySelector('input[name="gtm"]:checked')) { alert('Please select a Go-to-Market strategy.'); return false; }
+            if (step === 3 && !document.querySelector('input[name="pricing-model"]:checked')) { alert('Please choose a pricing model.'); return false; }
+            if (step === 5) {
+                const customers = document.getElementById('desired-customers').value;
+                const margin = document.getElementById('desired-margin').value;
+                if (!customers || customers <= 0) { alert('Please enter a valid number of desired customers.'); return false; }
+                if (!margin || margin <= 0 || margin >= 100) { alert('Please enter a desired margin between 1 and 99.'); return false; }
+            }
+            return true;
+        }
+        
+        function saveStepState(step) {
+            if (step === 1) state.valueUnit = document.getElementById('value-unit').value;
+            if (step === 2) state.gtm = document.querySelector('input[name="gtm"]:checked').value;
+            if (step === 3) {
+                const selectedModelEl = document.querySelector('input[name="pricing-model"]:checked');
+                state.pricingModel = selectedModelEl.parentElement.querySelector('h3').textContent;
+            }
+            if (step === 5) {
+                state.financialGoals.customers = parseFloat(document.getElementById('desired-customers').value) || 0;
+                state.financialGoals.margin = parseFloat(document.getElementById('desired-margin').value) || 0;
+                state.financialGoals.currentCustomers = parseFloat(document.getElementById('current-customers').value) || 0;
+                state.financialGoals.growthRate = parseFloat(document.getElementById('growth-rate').value) || 0;
+            }
+        }
+        
+        function selectCard(element, groupName) {
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => radio.parentElement.classList.remove('selected'));
+            element.classList.add('selected');
+            element.querySelector('input').checked = true;
+        }
+
+        function populatePricingModels() {
+            const container = document.getElementById('pricing-model-options');
+            const models = pricingModelsData[state.gtm] || [];
+            container.innerHTML = models.map(model => `
+                <div class="card border-2 border-gray-200 p-4 rounded-lg cursor-pointer" onclick="selectCard(this, 'pricing-model')">
+                    <h3 class="font-bold text-lg">${model.title}</h3>
+                    <p class="text-sm text-gray-600 mt-1">${model.desc}</p>
+                    <input type="radio" name="pricing-model" value="${model.id}" class="hidden">
+                </div>`).join('');
+        }
+
+        function populateCostWorkbooks() {
+            const createRow = (item) => `
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-2 items-center">
+                    <div class="md:col-span-2"><label for="cost-${item.id}" class="block text-sm font-medium text-gray-700">${item.name}</label><p class="text-xs text-gray-500">${item.desc}</p></div>
+                    <div class="md:col-span-1"><div class="relative"><span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">$</span><input type="number" id="cost-${item.id}" oninput="updateCost('${item.id}', this.value)" class="pl-7 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="0"></div></div>
+                    <div class="md:col-span-2"><input type="text" id="notes-${item.id}" oninput="updateNotes('${item.id}', this.value)" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Notes"></div>
+                </div>`;
+            document.getElementById('cogs-content').innerHTML = cogsItems.map(createRow).join('<hr class="my-2 border-gray-100">');
+            document.getElementById('opex-content').innerHTML = opexItems.map(createRow).join('<hr class="my-2 border-gray-100">');
+        }
+        
+        function updateCost(id, value) {
+            if (!state.costs[id]) state.costs[id] = {};
+            state.costs[id].value = parseFloat(value) || 0;
+            calculateRecommendations();
+        }
+
+        function updateNotes(id, notes) {
+            if (!state.costs[id]) state.costs[id] = {};
+            state.costs[id].notes = notes;
+        }
+
+        function switchTab(tabName) {
+            document.getElementById('cogs-content').classList.toggle('hidden', tabName !== 'cogs');
+            document.getElementById('opex-content').classList.toggle('hidden', tabName === 'cogs');
+            document.getElementById('cogs-tab').classList.toggle('active', tabName === 'cogs');
+            document.getElementById('opex-tab').classList.toggle('active', tabName !== 'cogs');
+        }
+        
+        function populateRecommendations() {
+            document.getElementById('gtm-strategy-name').textContent = `${state.gtm}-First`;
+            const tipsContainer = document.getElementById('pricing-tips-display');
+            const tips = pricingTipsData[state.gtm] || [];
+            tipsContainer.innerHTML = tips.map(tip => `
+                <div class="p-3 bg-gray-100 rounded-md">
+                    <p class="font-semibold text-gray-800">${tip.title}</p>
+                    <p class="text-sm text-gray-600">${tip.desc}</p>
+                </div>`).join('');
+            calculateRecommendations();
+        }
+        
+        function calculateRecommendations() {
+            const formatCurrency = (num) => num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            
+            const desiredCustomers = parseFloat(document.getElementById('desired-customers').value) || 0;
+            const margin = parseFloat(document.getElementById('desired-margin').value) || 0;
+            const currentCustomers = parseFloat(document.getElementById('current-customers').value) || 0;
+            const growthRate = parseFloat(document.getElementById('growth-rate').value) || 0;
+            
+            const totalCost = Object.values(state.costs).reduce((sum, item) => sum + (item.value || 0), 0);
+            
+            let recommendedPrice = 0;
+            if (desiredCustomers > 0 && margin > 0 && margin < 100) {
+                const costPerCustomer = totalCost / desiredCustomers;
+                recommendedPrice = costPerCustomer / (1 - (margin / 100));
+            }
+            
+            let timeline = '-';
+            if (growthRate > 0 && desiredCustomers > currentCustomers && currentCustomers >= 0) {
+                const months = Math.log(desiredCustomers / (currentCustomers || 1)) / Math.log(1 + (growthRate / 100));
+                timeline = months.toFixed(1);
+            } else if (desiredCustomers <= currentCustomers) {
+                timeline = '0.0';
+            }
+
+            document.getElementById('recommended-price-display').textContent = formatCurrency(recommendedPrice);
+            document.getElementById('timeline-display').textContent = `${timeline} Months`;
+            document.getElementById('current-revenue-display').textContent = formatCurrency(currentCustomers * recommendedPrice);
+            document.getElementById('desired-revenue-display').textContent = formatCurrency(desiredCustomers * recommendedPrice);
+        }
+
+        function getFinancialProjections() {
+            const { customers, margin, currentCustomers, growthRate } = state.financialGoals;
+            const totalCost = Object.values(state.costs).reduce((sum, item) => sum + (item.value || 0), 0);
+            
+            let recommendedPrice = 0;
+            if (customers > 0 && margin > 0 && margin < 100) {
+                const costPerCustomer = totalCost / customers;
+                recommendedPrice = costPerCustomer / (1 - (margin / 100));
+            }
+
+            let timeline = '-';
+            if (growthRate > 0 && customers > currentCustomers && currentCustomers >= 0) {
+                const months = Math.log(customers / (currentCustomers || 1)) / Math.log(1 + (growthRate / 100));
+                timeline = months.toFixed(1);
+            } else if (customers <= currentCustomers) {
+                timeline = '0.0';
+            }
+
+            return {
+                recommendedPrice,
+                timeline,
+                currentRevenue: currentCustomers * recommendedPrice,
+                desiredRevenue: customers * recommendedPrice
+            };
+        }
+
+        function generateSummary() {
+            document.getElementById('summary-value-unit').textContent = state.valueUnit || '-';
+            document.getElementById('summary-gtm').textContent = state.gtm ? `${state.gtm}-First` : '-';
+            document.getElementById('summary-model').textContent = state.pricingModel || '-';
+
+            const projections = getFinancialProjections();
+            const formatCurrency = (num) => num.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            
+            document.getElementById('summary-rec-price').textContent = formatCurrency(projections.recommendedPrice);
+            document.getElementById('summary-timeline').textContent = `${projections.timeline} Months`;
+            document.getElementById('summary-current-revenue').textContent = formatCurrency(projections.currentRevenue);
+            document.getElementById('summary-desired-revenue').textContent = formatCurrency(projections.desiredRevenue);
+
+            const cogsTable = document.getElementById('summary-cogs-table');
+            const opexTable = document.getElementById('summary-opex-table');
+            let cogsTotal = 0;
+            let opexTotal = 0;
+
+            const createSummaryRow = (item, isTotal = false) => {
+                const cost = state.costs[item.id]?.value || 0;
+                const notes = state.costs[item.id]?.notes || '';
+                const notesHtml = notes ? `<div class="text-xs text-gray-500 pl-4">- ${notes}</div>` : '';
+                if (isTotal) return `<div class="flex justify-between items-center font-bold text-lg border-t-2 pt-2 mt-2"><span>${item.name}</span><span>${formatCurrency(item.total)}</span></div>`;
+                if (cost > 0) return `<div><div class="flex justify-between items-center text-sm"><span>${item.name}</span><span class="font-medium">${formatCurrency(cost)}</span></div>${notesHtml}</div>`;
+                return '';
+            };
+
+            cogsTable.innerHTML = cogsItems.map(item => { cogsTotal += state.costs[item.id]?.value || 0; return createSummaryRow(item); }).join('');
+            opexTable.innerHTML = opexItems.map(item => { opexTotal += state.costs[item.id]?.value || 0; return createSummaryRow(item); }).join('');
+            cogsTable.innerHTML += createSummaryRow({ name: 'Total Monthly COGS', total: cogsTotal }, true);
+            opexTable.innerHTML += createSummaryRow({ name: 'Total Monthly OpEx', total: opexTotal }, true);
+        }
+
+        function downloadCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const projections = getFinancialProjections();
+            const sanitize = (str) => `"${(str || '').replace(/"/g, '""')}"`;
+
+            // Section 1: Strategy
+            csvContent += "Section,Item,Value\n";
+            csvContent += `Strategy,Core Value Unit,${sanitize(state.valueUnit)}\n`;
+            csvContent += `Strategy,GTM Strategy,${sanitize(state.gtm + '-First')}\n`;
+            csvContent += `Strategy,Pricing Model,${sanitize(state.pricingModel)}\n`;
+            csvContent += "\n";
+
+            // Section 2: Financial Goals & Projections
+            csvContent += "Section,Item,Value\n";
+            csvContent += `Projections,Current Customers,${state.financialGoals.currentCustomers}\n`;
+            csvContent += `Projections,Monthly Growth Rate (%),${state.financialGoals.growthRate}\n`;
+            csvContent += `Projections,Desired Customers,${state.financialGoals.customers}\n`;
+            csvContent += `Projections,Desired Margin (%),${state.financialGoals.margin}\n`;
+            csvContent += `Projections,Recommended Price Per Unit,${projections.recommendedPrice.toFixed(2)}\n`;
+            csvContent += `Projections,Timeline to Goal (Months),${projections.timeline}\n`;
+            csvContent += `Projections,Projected Current Monthly Revenue,${projections.currentRevenue.toFixed(2)}\n`;
+            csvContent += `Projections,Projected Goal Monthly Revenue,${projections.desiredRevenue.toFixed(2)}\n`;
+            csvContent += "\n";
+
+            // Section 3: Cost Workbook
+            csvContent += "Category,Item,Monthly Cost,Notes\n";
+            let cogsTotal = 0;
+            cogsItems.forEach(item => {
+                const cost = state.costs[item.id]?.value || 0;
+                if (cost > 0) {
+                    cogsTotal += cost;
+                    csvContent += `COGS,${sanitize(item.name)},${cost},${sanitize(state.costs[item.id]?.notes)}\n`;
+                }
+            });
+            csvContent += `COGS,Total Monthly COGS,${cogsTotal},\n`;
+            csvContent += "\n";
+            
+            let opexTotal = 0;
+            opexItems.forEach(item => {
+                const cost = state.costs[item.id]?.value || 0;
+                if (cost > 0) {
+                    opexTotal += cost;
+                    csvContent += `OpEx,${sanitize(item.name)},${cost},${sanitize(state.costs[item.id]?.notes)}\n`;
+                }
+            });
+            csvContent += `OpEx,Total Monthly OpEx,${opexTotal},\n`;
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "ai_pricing_strategy_summary.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function startOver() {
+            Object.assign(state, { currentStep: 1, valueUnit: '', gtm: '', pricingModel: '', costs: {}, financialGoals: { customers: 0, margin: 0, currentCustomers: 0, growthRate: 0 } });
+            document.getElementById('value-unit').value = '';
+            document.querySelectorAll('input[type="radio"]').forEach(radio => { radio.checked = false; radio.parentElement.classList.remove('selected'); });
+            ['current-customers', 'growth-rate', 'desired-customers', 'desired-margin'].forEach(id => document.getElementById(id).value = '');
+            showStep(1);
+        }
+
+        window.onload = () => { showStep(1); };
+    </script>
+</body>
+</html>
